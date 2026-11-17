@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Housing Affordability Calculator — Helen's Project Staff Tools</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&display=swap');
+
+  #hlp-afford-calc {
+    --clr-deep-purple: #2f2840;
+    --clr-medium-purple: #8d74b2;
+    --clr-off-white: #faf8fc;
+    --clr-lavender: #cdbfe2;
+    --clr-white: #ffffff;
+    --clr-lavender-tint: #f2edf8;
+    --clr-lavender-border: #ddd1ef;
+    --clr-text: #1a1520;
+    --clr-text-muted: #7a6e87;
+    --clr-text-subtle: #b0a8bc;
+    --clr-border: #e4ddef;
+    --shadow-sm:
+      0 1px 4px rgba(47, 40, 64, 0.06), 0 1px 2px rgba(47, 40, 64, 0.04);
+    --shadow-md:
+      0 4px 20px -4px rgba(47, 40, 64, 0.14), 0 2px 6px rgba(47, 40, 64, 0.06);
+    --font-heading: 'Fraunces', Georgia, serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+
+    font-family: var(--font-body) !important;
+    color: var(--clr-text);
+    box-sizing: border-box;
+  }
+
+  #hlp-afford-calc *,
+  #hlp-afford-calc *::before,
+  #hlp-afford-calc *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  #hlp-afford-calc .page {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  /* ── Page header ── */
+  #hlp-afford-calc .page-header {
+    padding: 0 0 1.5rem;
+    border-bottom: 1px solid var(--clr-border);
+    margin-bottom: 1.5rem;
+  }
+
+  #hlp-afford-calc .page-header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--clr-medium-purple) !important;
+    margin-bottom: 0.75rem;
+    writing-mode: horizontal-tb !important;
+  }
+
+  #hlp-afford-calc .page-header-badge::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--clr-medium-purple);
+    flex-shrink: 0;
+  }
+
+  #hlp-afford-calc .page-header h1 {
+    font-family: var(--font-heading) !important;
+    font-size: 28px !important;
+    font-weight: 600 !important;
+    color: var(--clr-text) !important;
+    letter-spacing: -0.025em !important;
+    line-height: 1.15 !important;
+    margin-bottom: 6px !important;
+  }
+
+  #hlp-afford-calc .page-header p {
+    font-size: 13px !important;
+    color: var(--clr-text-muted) !important;
+    line-height: 1.6 !important;
+    margin: 0 !important;
+  }
+
+  /* ── Input card ── */
+  #hlp-afford-calc .input-card {
+    background: var(--clr-white);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--clr-border);
+    overflow: hidden;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow-sm);
+  }
+
+  #hlp-afford-calc .input-card-head {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--clr-border);
+  }
+
+  #hlp-afford-calc .section-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--clr-text-subtle) !important;
+    margin: 0 !important;
+  }
+
+  #hlp-afford-calc .section-label::before {
+    content: '';
+    display: block;
+    width: 3px;
+    height: 13px;
+    background: var(--clr-medium-purple);
+    border-radius: 999px;
+    flex-shrink: 0;
+  }
+
+  #hlp-afford-calc .income-body {
+    padding: 0.875rem 1.5rem 1rem;
+  }
+
+  /* ── Column headers ── */
+  #hlp-afford-calc .col-hdr {
+    display: grid;
+    grid-template-columns: 170px 1fr 130px 36px;
+    gap: 8px;
+    margin-bottom: 6px;
+    padding: 0 4px;
+  }
+
+  #hlp-afford-calc .col-hdr span {
+    font-size: 10px !important;
+    color: var(--clr-text-subtle) !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  #hlp-afford-calc .income-grid {
+    display: grid;
+    gap: 5px;
+  }
+
+  #hlp-afford-calc .irow {
+    display: grid;
+    grid-template-columns: 170px 1fr 130px 36px;
+    gap: 8px;
+    align-items: center;
+    padding: 3px 4px;
+    border-radius: var(--radius-sm);
+    transition: background 0.12s;
+  }
+
+  #hlp-afford-calc .irow:hover {
+    background: var(--clr-lavender-tint);
+  }
+
+  /* ── Subsidy row (inside income card) ── */
+  #hlp-afford-calc .subsidy-row {
+    border-top: 1px dashed var(--clr-lavender-border);
+    margin-top: 0.875rem;
+    padding-top: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    flex-wrap: wrap;
+  }
+
+  #hlp-afford-calc .subsidy-row label {
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    color: var(--clr-text-muted) !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
+    overflow: visible !important;
+    width: auto !important;
+    max-width: none !important;
+    display: inline !important;
+    cursor: pointer;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  #hlp-afford-calc .subsidy-row input {
+    width: 140px !important;
+    flex-shrink: 0 !important;
+  }
+
+  #hlp-afford-calc .subsidy-hint {
+    font-size: 11px !important;
+    color: var(--clr-text-subtle) !important;
+    writing-mode: horizontal-tb !important;
+    white-space: normal !important;
+    line-height: 1.5;
+  }
+
+  /* ── Add button row ── */
+  #hlp-afford-calc .input-card-foot {
+    border-top: 1px solid var(--clr-border);
+    padding: 0.5rem 1.5rem;
+  }
+
+  /* ── Form controls ── */
+  #hlp-afford-calc select,
+  #hlp-afford-calc input[type='number'],
+  #hlp-afford-calc input[type='text'] {
+    height: 36px !important;
+    padding: 0 10px !important;
+    border: 1px solid var(--clr-border) !important;
+    border-radius: var(--radius-sm) !important;
+    background: var(--clr-off-white) !important;
+    color: var(--clr-text) !important;
+    font-size: 13px !important;
+    font-family: var(--font-body) !important;
+    width: 100% !important;
+    box-shadow: none !important;
+    outline: none !important;
+    transition:
+      border-color 0.15s,
+      box-shadow 0.15s,
+      background 0.15s;
+    appearance: auto;
+    -webkit-appearance: auto;
+  }
+
+  #hlp-afford-calc select:focus,
+  #hlp-afford-calc input:focus {
+    border-color: var(--clr-medium-purple) !important;
+    background: var(--clr-white) !important;
+    box-shadow: 0 0 0 3px rgba(141, 116, 178, 0.12) !important;
+    outline: none !important;
+  }
+
+  #hlp-afford-calc .rm {
+    width: 36px !important;
+    height: 36px !important;
+    border: 1px solid var(--clr-border) !important;
+    border-radius: var(--radius-sm) !important;
+    background: transparent !important;
+    color: var(--clr-text-subtle) !important;
+    cursor: pointer;
+    font-size: 13px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    flex-shrink: 0;
+    box-shadow: none !important;
+    line-height: 1;
+  }
+
+  #hlp-afford-calc .rm:hover {
+    background: #fdf0f0 !important;
+    color: #c0392b !important;
+    border-color: #f5c6c6 !important;
+  }
+
+  #hlp-afford-calc .add-btn {
+    height: 32px !important;
+    width: 100% !important;
+    padding: 0 8px !important;
+    border: none !important;
+    border-radius: var(--radius-sm) !important;
+    background: transparent !important;
+    color: var(--clr-text-muted) !important;
+    font-size: 12px !important;
+    font-family: var(--font-body) !important;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex !important;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+    box-shadow: none !important;
+  }
+
+  #hlp-afford-calc .add-btn:hover {
+    background: var(--clr-lavender-tint) !important;
+    color: var(--clr-medium-purple) !important;
+  }
+
+  #hlp-afford-calc .add-btn:active {
+    transform: translateY(1px);
+  }
+
+  /* ── Results card ── */
+  #hlp-afford-calc .results-card {
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--clr-border);
+    overflow: hidden;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow-md);
+  }
+
+  /* Empty state */
+  #hlp-afford-calc .empty {
+    background: var(--clr-white);
+    text-align: center;
+    color: var(--clr-text-subtle) !important;
+    font-size: 13px !important;
+    padding: 3rem 0;
+  }
+
+  #hlp-afford-calc .empty-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--clr-lavender-tint);
+    border: 1px solid var(--clr-lavender-border);
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 0.875rem;
+    color: var(--clr-medium-purple);
+  }
+
+  #hlp-afford-calc .empty-icon svg {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Results top — dark split */
+  #hlp-afford-calc .results-top {
+    background: var(--clr-deep-purple);
+    padding: 1.5rem 1.75rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1.5rem;
+    align-items: end;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #hlp-afford-calc .results-top::after {
+    content: '';
+    position: absolute;
+    bottom: -60px;
+    left: -40px;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      rgba(141, 116, 178, 0.12) 0%,
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+
+  #hlp-afford-calc .rt-left-label {
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(205, 191, 226, 0.55) !important;
+    margin-bottom: 0.5rem !important;
+    writing-mode: horizontal-tb !important;
+  }
+
+  #hlp-afford-calc .rt-income {
+    font-family: var(--font-heading) !important;
+    font-size: 36px !important;
+    font-weight: 600 !important;
+    color: var(--clr-white) !important;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 5px !important;
+  }
+
+  #hlp-afford-calc .rt-income sub {
+    font-family: var(--font-body) !important;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    color: rgba(205, 191, 226, 0.55) !important;
+    letter-spacing: 0;
+    vertical-align: middle;
+    margin-left: 2px;
+  }
+
+  #hlp-afford-calc .rt-annual {
+    font-size: 12px !important;
+    color: rgba(205, 191, 226, 0.45) !important;
+  }
+
+  #hlp-afford-calc .rt-right {
+    text-align: right;
+    border-left: 1px solid rgba(205, 191, 226, 0.1);
+    padding-left: 1.5rem;
+    position: relative;
+  }
+
+  #hlp-afford-calc .rt-right-badge {
+    display: inline-block;
+    background: rgba(141, 116, 178, 0.22);
+    border: 1px solid rgba(141, 116, 178, 0.32);
+    color: var(--clr-lavender) !important;
+    font-size: 9px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 999px;
+    margin-bottom: 0.5rem !important;
+    writing-mode: horizontal-tb !important;
+  }
+
+  #hlp-afford-calc .rt-max-label {
+    font-size: 11px !important;
+    color: rgba(205, 191, 226, 0.55) !important;
+    margin-bottom: 0.2rem !important;
+    writing-mode: horizontal-tb !important;
+  }
+
+  #hlp-afford-calc .rt-max-amt {
+    font-family: var(--font-heading) !important;
+    font-size: 48px !important;
+    font-weight: 600 !important;
+    color: var(--clr-white) !important;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  #hlp-afford-calc .rt-max-sub {
+    font-size: 11px !important;
+    color: rgba(205, 191, 226, 0.45) !important;
+    margin-top: 4px !important;
+    writing-mode: horizontal-tb !important;
+  }
+
+  /* Results bottom — light section */
+  #hlp-afford-calc .results-bottom {
+    background: var(--clr-white);
+    padding: 1.25rem 1.75rem;
+  }
+
+  #hlp-afford-calc .metrics-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    margin-bottom: 1rem;
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  #hlp-afford-calc .metric {
+    padding: 0.875rem 1rem;
+    border-right: 1px solid var(--clr-border);
+  }
+
+  #hlp-afford-calc .metric:last-child {
+    border-right: none !important;
+  }
+
+  #hlp-afford-calc .metric-label {
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--clr-text-subtle) !important;
+    margin-bottom: 0.3rem !important;
+    writing-mode: horizontal-tb !important;
+  }
+
+  #hlp-afford-calc .metric-val {
+    font-family: var(--font-heading) !important;
+    font-size: 20px !important;
+    font-weight: 600 !important;
+    color: var(--clr-text) !important;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 3px !important;
+  }
+
+  #hlp-afford-calc .metric-desc {
+    font-size: 10px !important;
+    color: var(--clr-text-subtle) !important;
+    line-height: 1.4;
+    writing-mode: horizontal-tb !important;
+  }
+
+  /* ── Subsidy result note ── */
+  #hlp-afford-calc .subsidy-note {
+    margin-bottom: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: var(--clr-lavender-tint);
+    border-radius: var(--radius-sm);
+    font-size: 12px !important;
+    color: var(--clr-text-muted) !important;
+    border: 1px solid var(--clr-lavender-border);
+    border-left: 3px solid var(--clr-medium-purple);
+    line-height: 1.6;
+  }
+
+  #hlp-afford-calc .subsidy-note strong {
+    color: var(--clr-deep-purple) !important;
+  }
+
+  /* ── CM guidance tip ── */
+  #hlp-afford-calc .tip {
+    background: var(--clr-lavender-tint);
+    border-left: 3px solid var(--clr-medium-purple);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 0.875rem 1rem;
+    font-size: 12px !important;
+    color: var(--clr-text-muted) !important;
+    line-height: 1.65;
+  }
+
+  #hlp-afford-calc .tip strong {
+    color: var(--clr-deep-purple) !important;
+  }
+
+  /* ── Footer ── */
+  #hlp-afford-calc .footer {
+    text-align: center;
+    font-size: 11px !important;
+    color: var(--clr-text-subtle) !important;
+    margin-top: 0.5rem;
+    padding-bottom: 1rem;
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 580px) {
+    #hlp-afford-calc .col-hdr {
+      display: none;
+    }
+    #hlp-afford-calc .irow {
+      grid-template-columns: 1fr 36px;
+      grid-template-rows: auto auto auto;
+      gap: 6px;
+      padding: 6px;
+    }
+    #hlp-afford-calc .irow select { grid-column: 1; }
+    #hlp-afford-calc .irow input[type='text'] { grid-column: 1; }
+    #hlp-afford-calc .irow input[type='number'] { grid-column: 1; }
+    #hlp-afford-calc .irow .rm { grid-column: 2; grid-row: 1; }
+    #hlp-afford-calc .results-top {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+    #hlp-afford-calc .rt-right {
+      border-left: none !important;
+      border-top: 1px solid rgba(205, 191, 226, 0.1);
+      padding-left: 0 !important;
+      padding-top: 1.25rem;
+      text-align: left;
+    }
+    #hlp-afford-calc .rt-max-amt { font-size: 38px !important; }
+    #hlp-afford-calc .metrics-row { grid-template-columns: 1fr; }
+    #hlp-afford-calc .metric {
+      border-right: none !important;
+      border-bottom: 1px solid var(--clr-border);
+    }
+    #hlp-afford-calc .metric:last-child { border-bottom: none !important; }
+    #hlp-afford-calc .subsidy-row { flex-wrap: wrap; }
+    #hlp-afford-calc .subsidy-row label { white-space: normal !important; }
+    #hlp-afford-calc .subsidy-row input { width: 100% !important; }
+  }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+
+    <header class="site-header">
+      <a aria-label='Helen\'s Project — home' class='logo' href='/'>
+        <img src="brand_assets/HP-logo.png" alt="Helen's Project Mental Health Care">
+      </a>
+      <span class="staff-label">Staff Tools</span>
+    </header>
+
+    <main class="tool-page-content">
+      <div class="tool-page-inner">
+        <a class='back-link' href='/'>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+          Back to all tools
+        </a>
+
+        <div id="hlp-afford-calc">
+          <div class="page">
+            <div class="page-header">
+              <div class="page-header-badge">
+                Helen&rsquo;s Project &mdash; Case Manager Tool
+              </div>
+              <h1>Housing Affordability Calculator</h1>
+              <p>
+                Enter all qualifying income sources to see what rent range the client
+                can afford.
+              </p>
+            </div>
+
+            <div class="input-card">
+              <div class="input-card-head">
+                <div class="section-label">Income sources</div>
+              </div>
+              <div class="income-body">
+                <div class="col-hdr">
+                  <span>Income type</span>
+                  <span>Description (optional)</span>
+                  <span>Monthly gross ($)</span>
+                  <span></span>
+                </div>
+                <div class="income-grid" id="hlp-income-list"></div>
+                <div class="subsidy-row">
+                  <label for="hlp-subsidy-input">Subsidy monthly amount ($)</label>
+                  <input
+                    type="number"
+                    id="hlp-subsidy-input"
+                    placeholder="0.00"
+                    min="0"
+                    step="1"
+                    oninput="hlpCalc()"
+                  />
+                  <span class="subsidy-hint"
+                    >RRH / PSH / VASH &mdash; enter the subsidy portion</span
+                  >
+                </div>
+              </div>
+              <div class="input-card-foot">
+                <button class="add-btn" onclick="hlpAddRow()">
+                  + Add income source
+                </button>
+              </div>
+            </div>
+
+            <div class="results-card" id="hlp-results">
+              <div class="empty">
+                <div class="empty-icon">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                    <polyline points="9 22 9 12 15 12 15 22" />
+                  </svg>
+                </div>
+                Enter income sources above to see results
+              </div>
+            </div>
+
+            <div class="footer">
+              Helen&rsquo;s Project &mdash; For Case Manager Use Only &mdash; Not for
+              Distribution
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      Helen's Project &mdash; For Staff Use Only
+    </footer>
+
+  </div>
+
+  <script>
+  (function () {
+    const TYPES = [
+      'Employment wages',
+      'SSI',
+      'SSDI',
+      'Child support',
+      'Alimony',
+      'VA benefits',
+      'TANF',
+      'Public assistance',
+      'Pension',
+      'Retirement income',
+      'Gig / self-employment',
+      'Other',
+    ];
+
+    let rows = [],
+      seq = 0;
+
+    function escAttr(s) {
+      return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    function fmt(n) {
+      return '$' + Math.round(n).toLocaleString('en-US');
+    }
+
+    window.hlpAddRow = function () {
+      const id = ++seq;
+      rows.push({ id: id, type: '', desc: '', amt: '' });
+      renderRows();
+      hlpCalc();
+    };
+
+    function removeRow(id) {
+      rows = rows.filter(function (r) {
+        return r.id !== id;
+      });
+      renderRows();
+      hlpCalc();
+    }
+
+    function up(id, field, val) {
+      const r = rows.find(function (r) {
+        return r.id === id;
+      });
+      if (r) r[field] = val;
+      hlpCalc();
+    }
+
+    window._hlpRemove = removeRow;
+    window._hlpUp = up;
+
+    function renderRows() {
+      const el = document.getElementById('hlp-income-list');
+      el.innerHTML = '';
+      rows.forEach(function (r) {
+        const d = document.createElement('div');
+        d.className = 'irow';
+        d.innerHTML =
+          '<select onchange="_hlpUp(' +
+          r.id +
+          ",'type',this.value)\">" +
+          '<option value="">Select type...</option>' +
+          TYPES.map(function (t) {
+            return (
+              '<option value="' +
+              t +
+              '"' +
+              (r.type === t ? ' selected' : '') +
+              '>' +
+              t +
+              '</option>'
+            );
+          }).join('') +
+          '</select>' +
+          '<input type="text" placeholder="e.g. Part-time at Walmart" value="' +
+          escAttr(r.desc) +
+          '" oninput="_hlpUp(' +
+          r.id +
+          ",'desc',this.value)\">" +
+          '<input type="number" placeholder="0.00" value="' +
+          escAttr(r.amt) +
+          '" min="0" step="1" oninput="_hlpUp(' +
+          r.id +
+          ",'amt',this.value)\">" +
+          '<button class="rm" onclick="_hlpRemove(' +
+          r.id +
+          ')" title="Remove" aria-label="Remove income source">\u2715</button>';
+        el.appendChild(d);
+      });
+    }
+
+    window.hlpCalc = function () {
+      const total = rows.reduce(function (s, r) {
+        return s + (parseFloat(r.amt) || 0);
+      }, 0);
+      const subsidy =
+        parseFloat(document.getElementById('hlp-subsidy-input').value) || 0;
+      const res = document.getElementById('hlp-results');
+
+      const emptyHTML =
+        '<div class="empty">' +
+        '<div class="empty-icon">' +
+        '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+        '<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>' +
+        '<polyline points="9 22 9 12 15 12 15 22"/>' +
+        '</svg>' +
+        '</div>' +
+        'Enter income sources above to see results' +
+        '</div>';
+
+      if (total <= 0) {
+        res.innerHTML = emptyHTML;
+        return;
+      }
+
+      const annual = total * 12;
+      const hud30 = total * 0.3;
+      const max2x = total / 2;
+      const max3x = total / 3;
+
+      const subsidyNote =
+        subsidy > 0
+          ? '<div class="subsidy-note">' +
+            '<strong>With ' +
+            fmt(subsidy) +
+            '/mo subsidy:</strong> client pays ' +
+            fmt(Math.max(0, max3x - subsidy)) +
+            '/mo toward a unit at the 3&times; threshold' +
+            ' &mdash; search for units up to <strong>' +
+            fmt(max3x) +
+            '/mo</strong> total rent.' +
+            '</div>'
+          : '';
+
+      res.innerHTML =
+        '<div class="results-top">' +
+        '<div class="rt-left">' +
+        '<div class="rt-left-label">Total gross monthly income</div>' +
+        '<div class="rt-income">' +
+        fmt(total) +
+        '<sub>/mo</sub></div>' +
+        '<div class="rt-annual">' +
+        fmt(annual) +
+        ' / year</div>' +
+        '</div>' +
+        '<div class="rt-right">' +
+        '<div class="rt-right-badge">Most common threshold</div>' +
+        '<div class="rt-max-label">3&times; income &mdash; max rent</div>' +
+        '<div class="rt-max-amt">' +
+        fmt(max3x) +
+        '</div>' +
+        '<div class="rt-max-sub">per month</div>' +
+        '</div>' +
+        '</div>' +
+        '<div class="results-bottom">' +
+        '<div class="metrics-row">' +
+        '<div class="metric">' +
+        '<div class="metric-label">30% rule</div>' +
+        '<div class="metric-val">' +
+        fmt(hud30) +
+        '</div>' +
+        '<div class="metric-desc">HUD affordability standard</div>' +
+        '</div>' +
+        '<div class="metric">' +
+        '<div class="metric-label">1&times; threshold</div>' +
+        '<div class="metric-val">' +
+        fmt(total) +
+        '</div>' +
+        '<div class="metric-desc">Income equals rent</div>' +
+        '</div>' +
+        '<div class="metric">' +
+        '<div class="metric-label">2&times; threshold</div>' +
+        '<div class="metric-val">' +
+        fmt(max2x) +
+        '</div>' +
+        '<div class="metric-desc">Some landlord minimum</div>' +
+        '</div>' +
+        '</div>' +
+        subsidyNote +
+        '<div class="tip">' +
+        '<strong>CM guidance:</strong> Most landlords require income &ge; 3&times; monthly rent. ' +
+        'Focus the housing search on units at or below <strong>' +
+        fmt(max3x) +
+        '/mo</strong>. ' +
+        'If the client has a subsidy (RRH, PSH, or VASH), enter it above &mdash; the calculator will show the client&rsquo;s out-of-pocket portion.' +
+        '</div>' +
+        '</div>';
+    };
+
+    hlpAddRow();
+  })();
+  </script>
+</body>
+</html>

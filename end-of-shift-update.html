@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>End of Shift Update — Helen's Project Staff Tools</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  .wrap{max-width:580px;margin:0 auto;font-family:var(--font-sans)}
+  .section{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:1rem}
+  .section-title{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:500;color:var(--color-text-primary);margin-bottom:1rem}
+  .badge{width:22px;height:22px;border-radius:50%;background:#8D74B2;color:#fff;font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .field{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+  .field:last-child{margin-bottom:0}
+  label{font-size:11px;font-weight:500;letter-spacing:.05em;color:var(--color-text-secondary);text-transform:uppercase}
+  input,select,textarea{width:100%;padding:8px 10px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);font-size:14px;font-family:var(--font-sans);color:var(--color-text-primary);background:var(--color-background-primary)}
+  textarea{resize:vertical;min-height:72px;line-height:1.5}
+  .block{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:1rem;margin-bottom:10px;position:relative}
+  .remove-btn{position:absolute;top:8px;right:10px;background:none;border:none;font-size:16px;cursor:pointer;color:var(--color-text-secondary);padding:0;line-height:1}
+  .add-btn{width:100%;padding:8px;border:0.5px dashed var(--color-border-secondary);border-radius:var(--border-radius-md);background:none;font-size:13px;color:var(--color-text-secondary);cursor:pointer;margin-top:4px}
+  .add-btn:hover{background:var(--color-background-secondary)}
+  .opt{font-size:11px;font-weight:400;color:var(--color-text-tertiary);margin-left:4px}
+  .generate-btn{width:100%;padding:14px;background:#8D74B2;color:#fff;border:none;border-radius:var(--border-radius-lg);font-size:15px;font-weight:500;cursor:pointer;margin-top:4px}
+  .generate-btn:hover{background:#7A63A0}
+  .generate-btn:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(141,116,178,0.4)}
+  .subtitle{font-size:13px;color:var(--color-text-secondary);margin-bottom:1.25rem}
+  .output-box{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-top:1rem;display:none}
+  .output-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+  .output-title{font-size:13px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em}
+  .copy-btn{padding:5px 12px;font-size:12px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);cursor:pointer}
+  .copy-btn:hover{background:var(--color-background-secondary)}
+  .output-text{font-size:14px;line-height:1.9;white-space:pre-wrap;color:var(--color-text-primary);font-family:var(--font-sans);background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:12px}
+  .error{color:#c0392b;font-size:13px;margin-top:8px;display:none}
+  .tip-banner{display:flex;align-items:flex-start;gap:10px;background:#f2edf8;border:0.5px solid #ddd1ef;border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:12px}
+  .tip-icon{font-size:15px;flex-shrink:0;margin-top:1px}
+  .tip-text{font-size:12px;color:#2F2840;line-height:1.6;flex:1}
+  .tip-text strong{font-weight:500}
+  .tip-dismiss{background:none;border:none;font-size:14px;color:#8D74B2;cursor:pointer;padding:0;flex-shrink:0;line-height:1;margin-top:1px}
+  .tip-dismiss:hover{color:#2F2840}
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+
+    <header class="site-header">
+      <a aria-label='Helen\'s Project — home' class='logo' href='/'>
+        <img src="brand_assets/HP-logo.png" alt="Helen's Project Mental Health Care">
+      </a>
+      <span class="staff-label">Staff Tools</span>
+    </header>
+
+    <main class="tool-page-content">
+      <div class="tool-page-inner">
+        <a class='back-link' href='/'>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+          Back to all tools
+        </a>
+
+        <div class="wrap">
+          <h2 style="font-size:20px;font-weight:600;color:var(--color-text-primary);margin-bottom:4px;font-family:'Fraunces',Georgia,serif;letter-spacing:-0.02em">End of shift update</h2>
+          <p class="subtitle">Fill in your shift details — a formatted Slack message will be generated for the team.</p>
+
+          <div class="section">
+            <div class="section-title"><span class="badge">1</span> Shift info</div>
+            <div class="grid2">
+              <div class="field"><label for="name">Your name</label><input id="name" type="text" placeholder="e.g. Brittney"></div>
+              <div class="field"><label for="dept">Department</label><input id="dept" type="text" placeholder="e.g. Front Desk"></div>
+            </div>
+            <div class="grid2">
+              <div class="field"><label for="sdate">Shift date</label><input id="sdate" type="date"></div>
+              <div class="field"><label for="stime">Shift end time</label><input id="stime" type="time"></div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-title"><span class="badge">2</span> Updates &amp; actions taken</div>
+            <div id="updates-list"></div>
+            <button class="add-btn" onclick="addUpdate()">+ Add update</button>
+          </div>
+
+          <div class="section">
+            <div class="section-title"><span class="badge">3</span> Pending / needs follow-up</div>
+            <div id="pending-list"></div>
+            <button class="add-btn" onclick="addPending()">+ Add pending item</button>
+          </div>
+
+          <div class="section">
+            <div class="section-title"><span class="badge">4</span> Closing note <span class="opt">(optional)</span></div>
+            <textarea id="closing" placeholder="e.g. Phones were quiet today. No urgent flags. Have a good evening!"></textarea>
+          </div>
+
+          <div class="error" id="err">Please fill in your name and department before generating.</div>
+          <button class="generate-btn" onclick="generate()">Generate update message</button>
+
+          <div class="output-box" id="output-box">
+            <div class="output-header">
+              <span class="output-title">Slack message</span>
+              <button class="copy-btn" onclick="copyMsg()">Copy</button>
+            </div>
+
+<div class="output-text" id="output-text"></div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      Helen's Project &mdash; For Staff Use Only
+    </footer>
+
+  </div>
+
+  <script>
+  let uc=0,pc=0;
+
+  function addUpdate(){
+    const id='u'+uc++;
+    const div=document.createElement('div');
+    div.className='block';div.id=id;
+    div.innerHTML=`<button class="remove-btn" onclick="document.getElementById('${id}').remove()">&#x2715;</button>
+    <div class="field"><label>What happened / what did you do?</label><textarea class="u-what" placeholder="e.g. Sent a follow-up email to a client regarding their pending form submission"></textarea></div>
+    <div class="grid2">
+      <div class="field"><label>Type</label>
+        <select class="u-type">
+          <option>FYI — no action needed</option>
+          <option>Action taken</option>
+          <option>Escalated</option>
+          <option>Needs follow-up</option>
+        </select>
+      </div>
+      <div class="field"><label>Who to watch for? <span class="opt">(optional)</span></label><input class="u-who" type="text" placeholder="e.g. client, vendor, team member"></div>
+    </div>`;
+    document.getElementById('updates-list').appendChild(div);
+  }
+
+  function addPending(){
+    const id='p'+pc++;
+    const div=document.createElement('div');
+    div.className='block';div.id=id;
+    div.innerHTML=`<button class="remove-btn" onclick="document.getElementById('${id}').remove()">&#x2715;</button>
+    <div class="field"><label>What's pending or needs attention?</label><textarea class="p-what" placeholder="e.g. Awaiting client response — watch for incoming email to the department inbox"></textarea></div>
+    <div class="field"><label>Deadline / timeframe <span class="opt">(optional)</span></label><input class="p-deadline" type="text" placeholder="e.g. EOD today, Friday 4/12, ASAP"></div>`;
+    document.getElementById('pending-list').appendChild(div);
+  }
+
+  function formatTime(t){
+    if(!t)return'';
+    const[h,m]=t.split(':');
+    const hr=parseInt(h),ampm=hr>=12?'PM':'AM',h12=hr%12||12;
+    return`${h12}:${m} ${ampm}`;
+  }
+
+  function formatDate(d){
+    if(!d)return'';
+    const[y,mo,day]=d.split('-');
+    const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return`${months[parseInt(mo)-1]} ${parseInt(day)}, ${y}`;
+  }
+
+  function generate(){
+    const name=document.getElementById('name').value.trim();
+    const dept=document.getElementById('dept').value.trim();
+    const date=document.getElementById('sdate').value;
+    const time=document.getElementById('stime').value;
+    const closing=document.getElementById('closing').value.trim();
+    const err=document.getElementById('err');
+
+    if(!name||!dept){err.style.display='block';return;}
+    err.style.display='none';
+
+    let lines=[];
+    lines.push(`🌙 End of Shift Update — ${dept}`);
+    lines.push(`👤 ${name}`);
+    if(date||time) lines.push(`📅 ${formatDate(date)}${time?' | Shift ended '+formatTime(time):''}`);
+
+    lines.push('');
+    const typeEmoji={'FYI — no action needed':'ℹ️','Action taken':'✅','Escalated':'🚨','Needs follow-up':'🔁'};
+      const updates=[...document.querySelectorAll('#updates-list .block')];
+      const hasUpdates=updates.some(b=>b.querySelector('.u-what').value.trim());
+      if(hasUpdates){
+        lines.push(`📋 Updates & Actions Taken`);
+        updates.forEach((b,i)=>{
+          const what=b.querySelector('.u-what').value.trim();
+          const type=b.querySelector('.u-type').value;
+          const who=b.querySelector('.u-who').value.trim();
+          if(!what)return;
+          const emoji=typeEmoji[type]||'•';
+          lines.push(`${i+1}. ${what}`);
+          lines.push(`   ${emoji} ${type}${who?' | 👀 Watch for: '+who:''}`);
+        });
+        lines.push('');
+      }
+
+      const pendings=[...document.querySelectorAll('#pending-list .block')];
+      const hasPending=pendings.some(b=>b.querySelector('.p-what').value.trim());
+      if(hasPending){
+        lines.push(`⏳ Pending / Needs Follow-Up`);
+        pendings.forEach((b,i)=>{
+          const what=b.querySelector('.p-what').value.trim();
+          const deadline=b.querySelector('.p-deadline').value.trim();
+          if(!what)return;
+          lines.push(`${i+1}. ${what}${deadline?' (🗓 '+deadline+')':''}`);
+        });
+        lines.push('');
+      }
+
+    if(closing) lines.push(`💬 ${closing}`);
+
+    const el=document.getElementById('output-text');
+    el.textContent=lines.join('\n');
+    const box=document.getElementById('output-box');
+    box.style.display='block';
+    box.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+
+  function copyMsg(){
+    navigator.clipboard.writeText(document.getElementById('output-text').textContent).then(()=>{
+      const btn=document.querySelector('.copy-btn');
+      btn.textContent='Copied!';
+      setTimeout(()=>btn.textContent='Copy',1500);
+    });
+  }
+
+  addUpdate();
+  addPending();
+  document.getElementById('sdate').value=new Date().toISOString().split('T')[0];
+  </script>
+</body>
+</html>

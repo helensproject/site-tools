@@ -1,0 +1,292 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600&family=Inter:wght@400;500;700&display=swap');
+
+/* ─── HP Brand Tokens ─── */
+:root {
+  --hp-primary:        #8D74B2;
+  --hp-primary-hover:  #7A63A0;
+  --hp-secondary:      #2F2840;
+  --hp-accent:         #CDBFE2;
+  --hp-background:     #FAF8FC;
+  --hp-surface:        #FFFFFF;
+  --hp-text-dark:      #2F2840;
+  --hp-text-muted:     #7a6e87;
+  --hp-text-subtle:    #b0a8bc;
+  --hp-border:         #CDBFE2;
+  --hp-border-medium:  #ddd1ef;
+  --hp-lavender-tint:  #f2edf8;
+
+  /* Squarespace / CMS variable mappings — resolves vars in end-of-shift tool */
+  --font-sans:                  'Inter', system-ui, sans-serif;
+  --font-mono:                  'Courier New', Courier, monospace;
+  --color-background-primary:   #FFFFFF;
+  --color-background-secondary: #FAF8FC;
+  --color-text-primary:         #2F2840;
+  --color-text-secondary:       #7a6e87;
+  --color-text-tertiary:        #b0a8bc;
+  --color-border-tertiary:      #CDBFE2;
+  --color-border-secondary:     #ddd1ef;
+  --border-radius-lg:           12px;
+  --border-radius-md:           8px;
+
+  --font-heading: 'Fraunces', Georgia, serif;
+  --font-body:    'Inter', system-ui, sans-serif;
+}
+
+/* ─── Reset ─── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body);
+  background: var(--hp-background);
+  color: var(--hp-text-dark);
+  font-size: 16px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Page scaffold ─── */
+.page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Site header ─── */
+.site-header {
+  background: var(--hp-surface);
+  border-bottom: 1px solid var(--hp-border);
+  padding: 0 2rem;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.site-header .logo { display: flex; align-items: center; }
+.site-header .logo img { height: 48px; width: auto; display: block; }
+
+.site-header .staff-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--hp-text-muted);
+}
+
+/* ─── Back link ─── */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--hp-primary);
+  text-decoration: none;
+  margin-bottom: 2rem;
+  transition: color 0.15s;
+}
+
+.back-link:hover { color: var(--hp-primary-hover); text-decoration: underline; }
+.back-link:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(141,116,178,0.35); border-radius: 4px; }
+
+.back-link svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ─── Site footer ─── */
+.site-footer {
+  background: var(--hp-secondary);
+  color: rgba(205, 191, 226, 0.55);
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  padding: 1.5rem 2rem;
+  margin-top: auto;
+}
+
+/* ─── Hub page: main content area ─── */
+.page-content {
+  flex: 1;
+  padding: 0 1.5rem 4rem;
+  max-width: 840px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ─── Hub hero ─── */
+.hub-hero {
+  padding: 3rem 0 2rem;
+  border-bottom: 1px solid var(--hp-border);
+  margin-bottom: 2.5rem;
+}
+
+.hub-hero .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--hp-primary);
+  margin-bottom: 0.75rem;
+}
+
+.hub-hero .eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--hp-primary);
+  flex-shrink: 0;
+}
+
+.hub-hero h1 {
+  font-family: var(--font-heading);
+  font-size: 40px;
+  font-weight: 600;
+  color: var(--hp-text-dark);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin: 0 0 0.6rem;
+}
+
+.hub-hero p {
+  font-size: 15px;
+  color: var(--hp-text-muted);
+  margin: 0;
+  line-height: 1.7;
+}
+
+/* ─── Tool cards grid ─── */
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+}
+
+@media (max-width: 600px) {
+  .tools-grid { grid-template-columns: 1fr; }
+  .hub-hero h1 { font-size: 30px; }
+  .site-header { padding: 0 1rem; }
+  .page-content { padding: 0 1rem 3rem; }
+}
+
+/* ─── Tool card ─── */
+.tool-card {
+  background: var(--hp-surface);
+  border-radius: 12px;
+  border: 1px solid var(--hp-border);
+  border-top: 6px solid var(--hp-primary);
+  padding: 1.5rem;
+  box-shadow: 0 4px 24px 0 rgba(141, 116, 178, 0.07);
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.tool-card:hover {
+  box-shadow: 0 8px 36px 0 rgba(141, 116, 178, 0.14);
+  transform: translateY(-2px);
+}
+
+.tool-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--hp-lavender-tint);
+  border: 1px solid var(--hp-border-medium);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  color: var(--hp-primary);
+  flex-shrink: 0;
+}
+
+.tool-icon svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tool-card h2 {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--hp-text-dark);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0 0 0.5rem;
+}
+
+.tool-card p {
+  font-size: 14px;
+  color: var(--hp-text-muted);
+  line-height: 1.65;
+  margin: 0 0 1.5rem;
+  flex: 1;
+}
+
+.cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--hp-primary);
+  color: #fff;
+  border-radius: 999px;
+  padding: 10px 24px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s;
+  align-self: flex-start;
+  border: none;
+}
+
+.cta-btn svg {
+  width: 13px;
+  height: 13px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.cta-btn:hover { background: var(--hp-primary-hover); }
+.cta-btn:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(141,116,178,0.4); }
+.cta-btn:active { transform: translateY(1px); }
+
+/* ─── Tool page wrapper ─── */
+.tool-page-content {
+  flex: 1;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.tool-page-inner {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+@media (max-width: 600px) {
+  .tool-page-content { padding: 1.5rem 1rem 3rem; }
+}
